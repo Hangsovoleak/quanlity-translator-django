@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>បកប្រែពាក្យបែបគុណភាព</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Neon color system mapped perfectly from your sample images */
+            --neon-green: #40F19D;
+            --neon-glow: rgba(64, 241, 157, 0.25);
+            --dark-bg: #0B0F12;
+            --card-bg: #161B1E;
+            --panel-bg: #1F262A;
+            --border-color: #2D373E;
+            
+            --text-light: #FFFFFF;
+            --text-muted: #8E9BA5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(64, 241, 157, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(64, 241, 157, 0.03) 0%, transparent 40%);
+            color: var(--text-light);
+            font-family: 'Kantumruy Pro', 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        /* Container Card */
+        .translator-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            position: relative;
+        }
+
+        /* Header UI Layout */
+        .translator-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .translator-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: -0.5px;
+        }
+
+        /* Astronaut Space Sticker */
+        .space-sticker {
+            width: 65px;
+            height: 65px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--panel-bg);
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            font-size: 32px;
+            box-shadow: 0 0 15px var(--neon-glow);
+        }
+
+        /* Grid Layout */
+        .translation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .translation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Panel Cards */
+        .panel {
+            background: var(--panel-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 320px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .panel:focus-within {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-glow);
+        }
+
+        /* Selection Dropdowns */
+        select {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-light);
+            background-color: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2340F19D' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            background-size: 16px;
+        }
+
+        select:disabled {
+            background-color: rgba(22, 27, 30, 0.5);
+            color: var(--text-muted);
+            border-color: var(--border-color);
+            cursor: not-allowed;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238E9BA5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+        }
+
+        /* Workspace Areas */
+        .workspace-area {
+            display: block; /* Removed flex parent settings completely to prevent centering traps */
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Core structure alignment patch */
+        textarea, .output-placeholder {
+            width: 100%;
+            min-height: 200px;
+            border: none;
+            resize: none;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: transparent;
+            outline: none;
+            text-align: left;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        /* Output Viewport Layout configuration overrides */
+        .output-placeholder {
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .output-placeholder.is-empty {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        /* Copy Button Icon */
+        .copy-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--neon-green);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        /* Footer Submit Action */
+        .translator-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: var(--neon-green);
+            color: var(--dark-bg);
+            border: none;
+            padding: 14px 60px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px var(--neon-glow);
+            transition: all 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(64, 241, 157, 0.45);
+        }
+    </style>
+</head>
+<body>
+
+    <form method="POST" class="translator-container">
+        {% csrf_token %}
+        
+        <header class="translator-header">
+            <h1>បកប្រែពាក្យបែបគុណភាព</h1>
+        </header>
+
+        <div class="translation-grid">
+            
+            <div class="panel input-panel">
+                <div class="select-wrapper">
+                    <select disabled>
+                        <option>Detect Language (English)</option>
+                    </select>
+                </div>
+                <div class="workspace-area">
+                    <textarea name="translate" placeholder="Type or paste text to translate..." required>{% if original_text %}{{ original_text }}{% endif %}</textarea>
+                </div>
+            </div>
+
+            <div class="panel output-panel">
+                <div class="select-wrapper">
+                    <select required name="language">
+                        <option value="km" {% if selected_language == 'km' %}selected{% endif %}>Cambodian</option>
+                        <option value="fr" {% if selected_language == 'fr' %}selected{% endif %}>French</option>
+                        <option value="zh" {% if selected_language == 'zh' %}selected{% endif %}>Chinese</option>
+                        <option value="ja" {% if selected_language == 'ja' %}selected{% endif %}>Japanese</option>
+                        <option value="en" {% if selected_language == 'en' %}selected{% endif %}>English</option>
+                    </select>
+                </div>
+                
+                <div class="workspace-area">
+                    {% if translated_text %}
+                        <div class="output-placeholder" style="font-weight: 500;">{{ translated_text }}</div>
+                    {% else %}
+                        <div class="output-placeholder is-empty">Translation will appear here...</div>
+                    {% endif %}
+                    
+                    {% if translated_text %}
+                    <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('{{ translated_text|escapejs }}')" title="Copy Translation">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin='round'><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="translator-footer">
+            <button type="submit">Translate</button>
+        </footer>
+    </form>
+
+</body>
+</html>
