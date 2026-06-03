@@ -1,6 +1,6 @@
 from django.shortcuts import render
+# from translate import Translator
 from translate import Translator
-
 def home(request):
     context = {}
     if request.method == "POST":
